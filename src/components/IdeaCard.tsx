@@ -22,50 +22,48 @@ const IdeaCard: React.FC<IdeaCardProps> = ({ idea }) => {
   const getIcon = () => {
     switch (idea.icon) {
       case 'brain':
-        return <Brain className="h-8 w-8 text-purple-400" />;
+        return <Brain className="h-8 w-8 text-indigo-400" />;
       case 'rocket':
         return <Rocket className="h-8 w-8 text-blue-400" />;
       case 'bot':
-        return <Bot className="h-8 w-8 text-green-400" />;
+        return <Bot className="h-8 w-8 text-purple-400" />;
       case 'star':
-        return <Star className="h-8 w-8 text-yellow-400" />;
+        return <Star className="h-8 w-8 text-sky-400" />;
       default:
-        return <Brain className="h-8 w-8 text-purple-400" />;
+        return <Brain className="h-8 w-8 text-indigo-400" />;
     }
   };
 
   return (
     <Link to={`/idea/${idea.id}`}>
-      <Card className="h-full card-hover neon-outline bg-card relative overflow-hidden">
+      <div className="h-full glass-card card-hover relative overflow-hidden p-6">
         <div className="absolute top-0 right-0 p-2">
           <Badge
             variant="outline"
             className={`
               ${idea.status === 'passed' 
-                ? 'bg-idea-passed/10 text-idea-passed border-idea-passed/30' 
-                : 'bg-idea-failed/10 text-idea-failed border-idea-failed/30'}
+                ? 'bg-green-500/10 text-green-400 border-green-500/30' 
+                : 'bg-red-500/10 text-red-400 border-red-500/30'}
             `}
           >
             {idea.status === 'passed' ? 'Passed' : 'Failed'}
           </Badge>
         </div>
-        <CardContent className="pt-6">
-          <div className="flex flex-col items-center text-center space-y-4">
-            <div className="p-2 rounded-full bg-secondary">
-              {getIcon()}
-            </div>
-            <h3 className="font-bold text-xl">{idea.title}</h3>
-            <p className="text-muted-foreground text-sm line-clamp-3">
-              {idea.description}
-            </p>
+        <div className="flex flex-col items-center text-center space-y-4">
+          <div className="p-2 rounded-full backdrop-blur-md bg-white/5">
+            {getIcon()}
           </div>
-        </CardContent>
-        <CardFooter className="pt-2 pb-4 justify-center">
-          <Badge variant="secondary" className="hover:bg-primary hover:text-white transition-colors">
+          <h3 className="font-bold text-xl text-white">{idea.title}</h3>
+          <p className="text-gray-300 text-sm line-clamp-3">
+            {idea.description}
+          </p>
+        </div>
+        <div className="pt-4 pb-2 flex justify-center">
+          <Badge variant="secondary" className="bg-white/10 text-white hover:bg-white/20 transition-colors">
             {idea.category}
           </Badge>
-        </CardFooter>
-      </Card>
+        </div>
+      </div>
     </Link>
   );
 };

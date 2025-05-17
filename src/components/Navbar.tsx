@@ -8,13 +8,13 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-blur py-4">
+    <nav className="fixed top-0 left-0 right-0 z-50 glass-panel py-4">
       <div className="container mx-auto px-4 flex justify-between items-center">
         <Link to="/" className="flex items-center">
-          <div className="h-10 w-10 rounded-full bg-gradient-to-r from-purple-600 to-blue-500 flex items-center justify-center mr-2">
+          <div className="h-10 w-10 rounded-full futuristic-gradient flex items-center justify-center mr-2">
             <span className="text-white font-bold">AI</span>
           </div>
-          <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-blue-400">
+          <span className="text-xl font-bold text-gradient">
             Startup Generator
           </span>
         </Link>
@@ -42,7 +42,7 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden absolute top-16 left-0 right-0 bg-background border-b border-gray-800 animate-fade-in">
+        <div className="md:hidden absolute top-16 left-0 right-0 glass-panel animate-fade-in">
           <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
             <Link 
               to="/" 

@@ -79,7 +79,7 @@ const Generator = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h1 className="text-3xl md:text-5xl font-bold mb-6 animate-fade-in">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-blue-500">
+              <span className="text-gradient">
                 AI Startup Ideas Generator
               </span>
             </h1>
