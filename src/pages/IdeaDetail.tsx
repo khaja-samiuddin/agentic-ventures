@@ -1,23 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Download, Brain, Rocket, Bot, Star, Check, X, Users, TrendingUp, BarChart4, Target, BriefcaseBusiness, Sparkles } from 'lucide-react';
+import { ArrowLeft, Download, Brain, Rocket, Bot, Star, Check, X, Calendar, Clock, Link2, DollarSign, ThumbsUp, ThumbsDown, Search, Scale, Lightbulb, FileText, Code, BookOpen } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import PageLayout from '@/components/PageLayout';
 import { IdeaType } from '@/components/IdeaCard';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+// Extended idea type with Agentic Ventures data
+interface DetailedIdeaType extends IdeaType {
+  source: string;
+  date: string;
+  time: string;
+  cost: string;
+  scoutStatus: 'qualified' | 'failed';
+  juryScore: number;
+  architectPlan: boolean;
+}
 
 const IdeaDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const [feedbackSubmitted, setFeedbackSubmitted] = useState<'positive' | 'negative' | null>(null);
   
   // Sample data for demonstration - in a real app, you'd fetch this by ID
-  const ideas: IdeaType[] = [
+  const ideas: DetailedIdeaType[] = [
     {
       id: 1,
       title: "AI Medical Diagnostics Platform",
       description: "A platform using machine learning to analyze medical images and assist doctors in early disease detection, improving diagnostic accuracy by up to 40%.",
       category: "Healthcare",
       status: "passed",
-      icon: "brain"
+      icon: "brain",
+      source: "Hacker News",
+      date: "2023-07-15",
+      time: "14:32 UTC",
+      cost: "$0.42",
+      scoutStatus: "qualified",
+      juryScore: 8.7,
+      architectPlan: true
     },
     {
       id: 2,
@@ -25,7 +45,14 @@ const IdeaDetail = () => {
       description: "AI system that optimizes energy distribution in power grids to reduce waste and lower costs, potentially saving up to 15% in energy expenses.",
       category: "Energy",
       status: "passed",
-      icon: "bot"
+      icon: "bot",
+      source: "YC Startup Ideas",
+      date: "2023-08-23",
+      time: "09:15 UTC",
+      cost: "$0.37",
+      scoutStatus: "qualified",
+      juryScore: 7.9,
+      architectPlan: true
     },
     {
       id: 3,
@@ -33,7 +60,14 @@ const IdeaDetail = () => {
       description: "Adaptive learning system that customizes educational content based on individual student performance, improving learning outcomes through personalization.",
       category: "Education",
       status: "failed", 
-      icon: "rocket"
+      icon: "rocket",
+      source: "r/startups",
+      date: "2023-09-05",
+      time: "16:48 UTC",
+      cost: "$0.29",
+      scoutStatus: "failed",
+      juryScore: 5.2,
+      architectPlan: false
     },
     {
       id: 4,
@@ -41,39 +75,14 @@ const IdeaDetail = () => {
       description: "AI-powered shopping assistant that helps customers find products and provides personalized recommendations, increasing conversion rates by 25%.",
       category: "Retail",
       status: "passed",
-      icon: "star"
-    },
-    {
-      id: 5,
-      title: "Predictive Agriculture System",
-      description: "Platform that uses AI to predict crop yields, pest outbreaks, and optimize farming practices, increasing farm efficiency and sustainability.",
-      category: "Agriculture",
-      status: "passed",
-      icon: "brain"
-    },
-    {
-      id: 6,
-      title: "AI Content Creation Suite",
-      description: "Tools that generate high-quality written content, images, and videos for marketing and content creation, saving time and enhancing creativity.",
-      category: "Marketing",
-      status: "failed",
-      icon: "bot"
-    },
-    {
-      id: 7,
-      title: "Smart Supply Chain Manager",
-      description: "AI system that optimizes logistics, inventory, and distribution to reduce costs and improve efficiency, minimizing waste and delays.",
-      category: "Logistics",
-      status: "passed",
-      icon: "rocket"
-    },
-    {
-      id: 8,
-      title: "Virtual Mental Health Coach",
-      description: "AI-powered platform providing personalized mental health support and therapy assistance, making wellness resources more accessible to all.",
-      category: "Healthcare",
-      status: "passed",
-      icon: "star"
+      icon: "star",
+      source: "TechCrunch",
+      date: "2023-10-12",
+      time: "11:27 UTC",
+      cost: "$0.35",
+      scoutStatus: "qualified",
+      juryScore: 8.2,
+      architectPlan: true
     }
   ];
   
@@ -82,17 +91,17 @@ const IdeaDetail = () => {
   if (!idea) {
     return (
       <PageLayout>
-        <div className="container mx-auto px-6 py-32">
-          <div className="max-w-2xl mx-auto text-center frost-panel rounded-3xl p-16">
-            <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-8">
-              <X className="h-8 w-8 text-red-400" />
+        <div className="container mx-auto px-6 py-24">
+          <div className="max-w-2xl mx-auto text-center bg-white p-12 rounded-lg border border-neutral-200 shadow-sm">
+            <div className="w-20 h-20 rounded-full bg-neutral-100 flex items-center justify-center mx-auto mb-8">
+              <X className="h-8 w-8 text-red-600" />
             </div>
-            <h1 className="text-3xl font-medium mb-6">Idea Not Found</h1>
+            <h1 className="text-3xl font-medium mb-6 text-foreground">Idea Not Found</h1>
             <p className="text-muted-foreground text-lg mb-10">The startup idea you're looking for doesn't exist or may have been removed.</p>
             <Link to="/ideas">
-              <Button className="glass-button rounded-full px-8 py-6 text-base font-medium group">
-                <span className="mr-3">Back to Ideas</span>
-                <ArrowLeft className="h-4 w-4 text-primary/90" />
+              <Button className="bg-primary text-white rounded-md px-6 py-2 font-medium">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                <span>Back to Ideas</span>
               </Button>
             </Link>
           </div>
@@ -104,238 +113,287 @@ const IdeaDetail = () => {
   const getIcon = () => {
     switch (idea.icon) {
       case 'brain':
-        return <Brain className="h-10 w-10 text-blue-400" />;
+        return <Brain className="h-10 w-10 text-primary" />;
       case 'rocket':
-        return <Rocket className="h-10 w-10 text-violet-400" />;
+        return <Rocket className="h-10 w-10 text-primary" />;
       case 'bot':
-        return <Bot className="h-10 w-10 text-indigo-400" />;
+        return <Bot className="h-10 w-10 text-primary" />;
       case 'star':
         return <Star className="h-10 w-10 text-primary" />;
       default:
-        return <Brain className="h-10 w-10 text-blue-400" />;
+        return <Brain className="h-10 w-10 text-primary" />;
     }
   };
 
-  const longDescription = `This innovative AI startup concept addresses a significant market need in the ${idea.category} sector. 
-  
-  Using advanced machine learning algorithms and neural networks, this platform can process vast amounts of data to provide intelligent solutions that current market options lack.
-  
-  The business model relies on a subscription-based service with tiered pricing for different user segments. Initial target customers include medium to large enterprises seeking to optimize their operations and reduce costs.
-  
-  Current market analysis shows a potential addressable market of $2.5 billion, with an annual growth rate of 24%. Competition exists, but most solutions lack the comprehensive approach this concept provides.
-  
-  Implementation would require an initial team of 5-7 people, including AI specialists, domain experts, and business development professionals. Estimated time to minimum viable product is 8-12 months with initial funding needs of approximately $1.2 million.`;
+  // The mock detailed business plan text
+  const rawData = `This innovative AI startup concept addresses a significant market need in the ${idea.category} sector.
+
+Using advanced machine learning algorithms and neural networks, this platform can process vast amounts of data to provide intelligent solutions that current market options lack.
+
+The business model relies on a subscription-based service with tiered pricing for different user segments. Initial target customers include medium to large enterprises seeking to optimize their operations and reduce costs.
+
+Current market analysis shows a potential addressable market of $2.5 billion, with an annual growth rate of 24%. Competition exists, but most solutions lack the comprehensive approach this concept provides.
+
+Implementation would require an initial team of 5-7 people, including AI specialists, domain experts, and business development professionals. Estimated time to minimum viable product is 8-12 months with initial funding needs of approximately $1.2 million.`;
 
   return (
     <PageLayout>
-      <section className="relative py-24 md:py-32">
-        <div className="absolute inset-0 particle-background z-0"></div>
-        <div className="blur-dot h-[600px] w-[600px] -top-20 -left-40"></div>
-        
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="mb-10">
-            <Link to="/ideas" className="inline-flex items-center text-muted-foreground hover:text-white transition-colors glass-morphism px-5 py-2 rounded-full group">
-              <ArrowLeft size={16} className="mr-3 group-hover:-translate-x-1 transition-transform" />
+      <section className="py-20 pb-12">
+        <div className="container mx-auto px-6">
+          <div className="mb-8">
+            <Link to="/ideas" className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors bg-neutral-100 px-4 py-2 rounded-md group text-sm">
+              <ArrowLeft size={14} className="mr-2 group-hover:-translate-x-1 transition-transform" />
               Back to Ideas
             </Link>
           </div>
           
-          {/* Idea Header */}
-          <div className="frost-panel rounded-3xl p-10 md:p-16 mb-16 animate-fade-in border border-white/5">
-            <div className="flex flex-col md:flex-row md:items-center gap-8 mb-12">
-              <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
-                {getIcon()}
-              </div>
-              <div>
-                <div className="flex items-center gap-4 mb-4 flex-wrap">
-                  <h1 className="text-4xl md:text-5xl font-medium">{idea.title}</h1>
-                  <Badge
-                    variant="outline"
-                    className={`px-4 py-1.5 text-sm ${
-                      idea.status === 'passed' 
-                        ? 'bg-green-500/10 text-green-400 border-green-500/30' 
-                        : 'bg-red-500/10 text-red-400 border-red-500/30'
-                    }`}
+          {/* Main content container */}
+          <div className="bg-white rounded-xl border border-neutral-200 shadow-sm overflow-hidden mb-10">
+            {/* Header with basic info */}
+            <div className="p-8 border-b border-neutral-100">
+              <div className="flex flex-col md:flex-row gap-6 items-start">
+                <div className="bg-neutral-100 p-6 rounded-lg flex-shrink-0">
+                  {getIcon()}
+                </div>
+                <div className="flex-grow">
+                  <div className="flex flex-wrap items-center gap-3 mb-3">
+                    <h1 className="text-3xl font-medium text-foreground">{idea.title}</h1>
+                    <Badge className={`px-3 py-1 ${
+                      idea.status === 'passed' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                    }`}>
+                      {idea.status === 'passed' ? 'Viable' : 'Research'}
+                    </Badge>
+                  </div>
+                  <p className="text-lg text-muted-foreground mb-6">{idea.description}</p>
+                  
+                  {/* Metadata */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                    <div className="flex items-center text-muted-foreground">
+                      <Calendar size={16} className="mr-2" />
+                      <span>{idea.date}</span>
+                    </div>
+                    <div className="flex items-center text-muted-foreground">
+                      <Clock size={16} className="mr-2" />
+                      <span>{idea.time}</span>
+                    </div>
+                    <div className="flex items-center text-muted-foreground">
+                      <Link2 size={16} className="mr-2" />
+                      <span>{idea.source}</span>
+                    </div>
+                    <div className="flex items-center text-muted-foreground">
+                      <DollarSign size={16} className="mr-2" />
+                      <span>Generation cost: {idea.cost}</span>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Feedback buttons */}
+                <div className="flex-shrink-0 flex gap-2 mt-2 md:mt-0">
+                  <Button 
+                    variant={feedbackSubmitted === 'positive' ? 'default' : 'outline'} 
+                    size="sm" 
+                    className={`rounded-md ${feedbackSubmitted === 'positive' ? 'bg-green-600 hover:bg-green-700' : 'hover:bg-neutral-100'}`}
+                    onClick={() => setFeedbackSubmitted('positive')}
+                    disabled={feedbackSubmitted !== null && feedbackSubmitted !== 'positive'}
                   >
-                    {idea.status === 'passed' ? 'Viable' : 'Research'}
-                  </Badge>
+                    <ThumbsUp size={16} className="mr-1" />
+                    <span>Helpful</span>
+                  </Button>
+                  <Button 
+                    variant={feedbackSubmitted === 'negative' ? 'default' : 'outline'} 
+                    size="sm" 
+                    className={`rounded-md ${feedbackSubmitted === 'negative' ? 'bg-red-600 hover:bg-red-700' : 'hover:bg-neutral-100'}`}
+                    onClick={() => setFeedbackSubmitted('negative')}
+                    disabled={feedbackSubmitted !== null && feedbackSubmitted !== 'negative'}
+                  >
+                    <ThumbsDown size={16} className="mr-1" />
+                    <span>Not helpful</span>
+                  </Button>
                 </div>
-                <Badge variant="secondary" className="bg-white/5 text-white/80 border-white/10 px-4 py-1.5">{idea.category}</Badge>
               </div>
             </div>
             
-            <div className="mb-16">
-              <div className="inline-flex items-center mb-6 glass-morphism px-4 py-1.5 rounded-full text-xs text-white/70">
-                <Sparkles size={12} className="text-primary mr-2" />
-                <span className="tracking-wider">CONCEPT SUMMARY</span>
-              </div>
-              <p className="text-xl text-muted-foreground leading-relaxed">{idea.description}</p>
-            </div>
-          </div>
-          
-          {/* Detailed Analysis */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-16">
-            <div className="frost-panel rounded-3xl p-10 border border-white/5 hoverable-card">
-              <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-6 border border-white/10">
-                <TrendingUp className="h-5 w-5 text-primary" />
-              </div>
-              <h2 className="text-2xl font-medium mb-4">Market Opportunity</h2>
-              <p className="text-muted-foreground leading-relaxed">
-                The addressable market for this concept is estimated at $2.5 billion, with an annual growth rate of 24%. Current solutions lack comprehensive features.
-              </p>
-            </div>
-            
-            <div className="frost-panel rounded-3xl p-10 border border-white/5 hoverable-card">
-              <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-6 border border-white/10">
-                <BriefcaseBusiness className="h-5 w-5 text-primary" />
-              </div>
-              <h2 className="text-2xl font-medium mb-4">Business Model</h2>
-              <p className="text-muted-foreground leading-relaxed">
-                Subscription-based service with tiered pricing for different user segments. Initial target customers include medium to large enterprises.
-              </p>
-            </div>
-            
-            <div className="frost-panel rounded-3xl p-10 border border-white/5 hoverable-card">
-              <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-6 border border-white/10">
-                <Users className="h-5 w-5 text-primary" />
-              </div>
-              <h2 className="text-2xl font-medium mb-4">Implementation</h2>
-              <p className="text-muted-foreground leading-relaxed">
-                Requires an initial team of 5-7 people. Estimated time to MVP: 8-12 months. Initial funding needs: approximately $1.2 million.
-              </p>
-            </div>
-          </div>
-          
-          {/* Technology Details */}
-          <div className="frost-panel rounded-3xl p-10 md:p-16 mb-16 animate-fade-in border border-white/5">
-            <div className="inline-flex items-center mb-8 glass-morphism px-4 py-1.5 rounded-full text-xs text-white/70">
-              <Brain size={12} className="text-primary mr-2" />
-              <span className="tracking-wider">TECHNOLOGICAL APPROACH</span>
-            </div>
-            
-            <h2 className="text-3xl font-medium mb-6">Implementation Overview</h2>
-            
-            <div className="text-lg text-muted-foreground leading-relaxed space-y-6">
-              <p>
-                This concept leverages advanced machine learning algorithms and neural networks to process vast amounts of data and provide intelligent solutions in the {idea.category} sector.
-              </p>
-              <p>
-                The core technology relies on a combination of supervised learning models and real-time data processing pipelines to deliver actionable insights to users.
-              </p>
-              <p>
-                The platform's architecture is designed for scalability, with cloud-native components that can adapt to changing workloads and user requirements.
-              </p>
-            </div>
-          </div>
-          
-          {/* Evaluation Status */}
-          <div className="max-w-3xl mx-auto frost-panel rounded-3xl border overflow-hidden mb-16">
-            <div className={`p-10 ${
-              idea.status === 'passed' 
-                ? 'bg-green-500/5 border-b border-green-500/20' 
-                : 'bg-red-500/5 border-b border-red-500/20'
-            }`}>
-              <div className="flex items-center mb-6">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center mr-4 ${
-                  idea.status === 'passed' 
-                    ? 'bg-green-500/10 text-green-400' 
-                    : 'bg-red-500/10 text-red-400'
-                }`}>
-                  {idea.status === 'passed' ? <Check className="h-5 w-5" /> : <X className="h-5 w-5" />}
+            {/* Agentic Ventures Workflow Section */}
+            <div className="p-8">
+              <h2 className="text-xl font-medium mb-8 text-foreground">Agentic Ventures Analysis Pipeline</h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                {/* Scout card */}
+                <div className="bg-neutral-50 rounded-lg border border-neutral-200 p-6 flex flex-col">
+                  <div className="flex items-center mb-4">
+                    <div className="bg-neutral-100 p-2 rounded-md mr-3">
+                      <Search className="h-5 w-5 text-primary" />
+                    </div>
+                    <h3 className="text-lg font-medium">Scout</h3>
+                  </div>
+                  
+                  <p className="text-sm text-muted-foreground mb-4 flex-grow">
+                    The Scout agent gathered this idea from {idea.source} and performed initial validation and research.
+                  </p>
+                  
+                  <div className="mt-auto">
+                    <div className={`flex items-center rounded-md p-2 ${
+                      idea.scoutStatus === 'qualified' 
+                        ? 'bg-green-100 text-green-800' 
+                        : 'bg-red-100 text-red-800'
+                    }`}>
+                      {idea.scoutStatus === 'qualified' 
+                        ? <Check className="h-4 w-4 mr-2" /> 
+                        : <X className="h-4 w-4 mr-2" />}
+                      <span className="text-sm font-medium">
+                        {idea.scoutStatus === 'qualified' ? 'Qualified' : 'Failed'}
+                      </span>
+                    </div>
+                  </div>
                 </div>
-                <h2 className="text-2xl font-medium">
-                  {idea.status === 'passed' 
-                    ? 'This concept is viable for further development' 
-                    : 'This concept requires further research'}
-                </h2>
+                
+                {/* Jury card */}
+                <div className="bg-neutral-50 rounded-lg border border-neutral-200 p-6 flex flex-col">
+                  <div className="flex items-center mb-4">
+                    <div className="bg-neutral-100 p-2 rounded-md mr-3">
+                      <Scale className="h-5 w-5 text-primary" />
+                    </div>
+                    <h3 className="text-lg font-medium">Jury</h3>
+                  </div>
+                  
+                  <p className="text-sm text-muted-foreground mb-4 flex-grow">
+                    Our panel of 20 specialized micro-agents evaluated this idea on market size, problem severity, competition, and technical feasibility.
+                  </p>
+                  
+                  <div className="mt-auto">
+                    <div className={`flex items-center rounded-md p-2 ${
+                      idea.juryScore >= 7 
+                        ? 'bg-green-100 text-green-800' 
+                        : idea.juryScore >= 5 
+                          ? 'bg-yellow-100 text-yellow-800' 
+                          : 'bg-red-100 text-red-800'
+                    }`}>
+                      <span className="text-sm font-medium">
+                        Score: {idea.juryScore}/10
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Architect card */}
+                <div className="bg-neutral-50 rounded-lg border border-neutral-200 p-6 flex flex-col">
+                  <div className="flex items-center mb-4">
+                    <div className="bg-neutral-100 p-2 rounded-md mr-3">
+                      <Lightbulb className="h-5 w-5 text-primary" />
+                    </div>
+                    <h3 className="text-lg font-medium">Architect</h3>
+                  </div>
+                  
+                  <p className="text-sm text-muted-foreground mb-4 flex-grow">
+                    {idea.architectPlan 
+                      ? "The Architect agent has created a detailed founder playbook with problem definition, solution design, and market strategy." 
+                      : "The Architect was not engaged for this idea due to insufficient scores in earlier stages."}
+                  </p>
+                  
+                  <div className="mt-auto">
+                    {idea.architectPlan ? (
+                      <Button className="w-full bg-primary hover:bg-primary/90 text-white">
+                        <FileText className="h-4 w-4 mr-2" />
+                        <span>View Founder Playbook</span>
+                      </Button>
+                    ) : (
+                      <div className="flex items-center rounded-md p-2 bg-neutral-200 text-neutral-600">
+                        <X className="h-4 w-4 mr-2" />
+                        <span className="text-sm font-medium">Not Available</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
               
-              <p className="text-muted-foreground leading-relaxed">
-                {idea.status === 'passed' 
-                  ? "Our analysis indicates that this startup idea has strong market potential, technical feasibility, and business viability. It is ready for implementation planning."
-                  : "While this concept shows promise, our analysis suggests additional research is needed in areas of market validation, technical implementation, or business model refinement."}
-              </p>
-            </div>
-            
-            <div className="p-10">
-              <h3 className="text-xl font-medium mb-6">Key Evaluation Metrics</h3>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-white/80">Market Potential</span>
-                    <span className={idea.status === 'passed' ? 'text-green-400' : 'text-yellow-400'}>
-                      {idea.status === 'passed' ? 'High' : 'Medium'}
-                    </span>
-                  </div>
-                  <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                    <div className={`h-full rounded-full ${
-                      idea.status === 'passed' 
-                        ? 'bg-gradient-to-r from-green-500 to-green-400 w-4/5' 
-                        : 'bg-gradient-to-r from-yellow-500 to-yellow-400 w-3/5'
-                    }`}></div>
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-white/80">Technical Feasibility</span>
-                    <span className={idea.status === 'passed' ? 'text-green-400' : 'text-yellow-400'}>
-                      {idea.status === 'passed' ? 'High' : 'Medium'}
-                    </span>
-                  </div>
-                  <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                    <div className={`h-full rounded-full ${
-                      idea.status === 'passed' 
-                        ? 'bg-gradient-to-r from-green-500 to-green-400 w-[85%]' 
-                        : 'bg-gradient-to-r from-yellow-500 to-yellow-400 w-[60%]'
-                    }`}></div>
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-white/80">Funding Attractiveness</span>
-                    <span className={idea.status === 'passed' ? 'text-green-400' : 'text-red-400'}>
-                      {idea.status === 'passed' ? 'High' : 'Low'}
-                    </span>
-                  </div>
-                  <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                    <div className={`h-full rounded-full ${
-                      idea.status === 'passed' 
-                        ? 'bg-gradient-to-r from-green-500 to-green-400 w-[90%]' 
-                        : 'bg-gradient-to-r from-red-500 to-red-400 w-[45%]'
-                    }`}></div>
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-white/80">Innovation Score</span>
-                    <span className={idea.status === 'passed' ? 'text-green-400' : 'text-green-400'}>
-                      {idea.status === 'passed' ? 'High' : 'High'}
-                    </span>
-                  </div>
-                  <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                    <div className={`h-full rounded-full ${
-                      idea.status === 'passed' 
-                        ? 'bg-gradient-to-r from-green-500 to-green-400 w-[85%]' 
-                        : 'bg-gradient-to-r from-green-500 to-green-400 w-[80%]'
-                    }`}></div>
-                  </div>
-                </div>
+              {/* Data Tabs */}
+              <div className="mt-8">
+                <Tabs defaultValue="raw-data">
+                  <TabsList className="grid w-full grid-cols-2 bg-neutral-100">
+                    <TabsTrigger value="raw-data" className="data-tab">Raw Data</TabsTrigger>
+                    <TabsTrigger value="founders-playbook" className="data-tab" disabled={!idea.architectPlan}>Founder's Playbook</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="raw-data" className="border border-neutral-200 rounded-md mt-4 p-6 bg-neutral-50">
+                    <div className="flex justify-between items-center mb-4">
+                      <h3 className="text-lg font-medium">Raw Idea Data</h3>
+                      <Button variant="outline" size="sm">
+                        <Download className="h-4 w-4 mr-2" />
+                        <span>Download JSON</span>
+                      </Button>
+                    </div>
+                    <div className="whitespace-pre-wrap text-sm text-muted-foreground font-mono bg-neutral-100 p-4 rounded-md">
+                      {rawData}
+                    </div>
+                  </TabsContent>
+                  
+                  <TabsContent value="founders-playbook" className="border border-neutral-200 rounded-md mt-4 p-6 bg-neutral-50">
+                    <div className="flex justify-between items-center mb-4">
+                      <h3 className="text-lg font-medium">Founder's Playbook</h3>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm">
+                          <Download className="h-4 w-4 mr-2" />
+                          <span>Download PDF</span>
+                        </Button>
+                        <Button variant="outline" size="sm">
+                          <Code className="h-4 w-4 mr-2" />
+                          <span>View Markdown</span>
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      {idea.architectPlan ? (
+                        <div className="space-y-4">
+                          <div className="bg-white border border-neutral-200 rounded-md p-4 hover:shadow-sm transition-shadow">
+                            <h4 className="font-medium text-foreground flex items-center">
+                              <BookOpen className="h-4 w-4 mr-2 text-primary" />
+                              Chapter 1: Problem Definition
+                            </h4>
+                            <p className="mt-2">A detailed analysis of the problem space, target customers, and current market gaps...</p>
+                          </div>
+                          
+                          <div className="bg-white border border-neutral-200 rounded-md p-4 hover:shadow-sm transition-shadow">
+                            <h4 className="font-medium text-foreground flex items-center">
+                              <BookOpen className="h-4 w-4 mr-2 text-primary" />
+                              Chapter 2: Solution Design
+                            </h4>
+                            <p className="mt-2">Technical architecture, key features, and implementation strategy...</p>
+                          </div>
+                          
+                          <div className="bg-white border border-neutral-200 rounded-md p-4 hover:shadow-sm transition-shadow">
+                            <h4 className="font-medium text-foreground flex items-center">
+                              <BookOpen className="h-4 w-4 mr-2 text-primary" />
+                              Chapter 3: Market Strategy
+                            </h4>
+                            <p className="mt-2">Go-to-market plan, customer acquisition strategy, and competitive positioning...</p>
+                          </div>
+                          
+                          <div className="bg-white border border-neutral-200 rounded-md p-4 hover:shadow-sm transition-shadow">
+                            <h4 className="font-medium text-foreground flex items-center">
+                              <BookOpen className="h-4 w-4 mr-2 text-primary" />
+                              Chapter 4: Business Model
+                            </h4>
+                            <p className="mt-2">Revenue streams, pricing strategy, and financial projections...</p>
+                          </div>
+                          
+                          <div className="bg-white border border-neutral-200 rounded-md p-4 hover:shadow-sm transition-shadow">
+                            <h4 className="font-medium text-foreground flex items-center">
+                              <BookOpen className="h-4 w-4 mr-2 text-primary" />
+                              Chapter 5: Resource Planning
+                            </h4>
+                            <p className="mt-2">Team composition, funding requirements, and development roadmap...</p>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="text-center py-12">
+                          <p>Founder's Playbook not available for this idea.</p>
+                        </div>
+                      )}
+                    </div>
+                  </TabsContent>
+                </Tabs>
               </div>
             </div>
-          </div>
-          
-          {/* Download Button */}
-          <div className="text-center">
-            <Button className="glass-button rounded-full px-10 py-7 text-base font-medium group">
-              <span className="mr-3">Download Detailed Report</span>
-              <div className="h-8 w-8 rounded-full glass-morphism flex items-center justify-center">
-                <Download className="h-4 w-4 text-white" />
-              </div>
-            </Button>
           </div>
         </div>
       </section>
