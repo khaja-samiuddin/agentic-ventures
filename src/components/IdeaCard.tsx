@@ -36,21 +36,21 @@ const IdeaCard: React.FC<IdeaCardProps> = ({ idea }) => {
 
   return (
     <Link to={`/idea/${idea.id}`}>
-      <div className="h-full glass-card card-hover relative overflow-hidden p-6">
+      <div className="h-full backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl card-hover relative overflow-hidden p-6">
         <div className="absolute top-0 right-0 p-2">
           <Badge
             variant="outline"
             className={`
               ${idea.status === 'passed' 
-                ? 'bg-green-500/10 text-green-400 border-green-500/30' 
-                : 'bg-red-500/10 text-red-400 border-red-500/30'}
+                ? 'bg-green-500/20 text-green-400 border-green-500/30' 
+                : 'bg-red-500/20 text-red-400 border-red-500/30'}
             `}
           >
             {idea.status === 'passed' ? 'Passed' : 'Failed'}
           </Badge>
         </div>
         <div className="flex flex-col items-center text-center space-y-4">
-          <div className="p-2 rounded-full backdrop-blur-md bg-white/5">
+          <div className="p-2 rounded-full backdrop-blur-md bg-white/10">
             {getIcon()}
           </div>
           <h3 className="font-bold text-xl text-white">{idea.title}</h3>
