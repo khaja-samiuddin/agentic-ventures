@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -50,30 +51,61 @@
 
 @layer components {
   .btn-gradient {
-    @apply bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 text-white font-medium py-2 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl;
+    @apply bg-gradient-to-r from-indigo-500 via-purple-500 to-blue-600 hover:from-indigo-600 hover:via-purple-600 hover:to-blue-700 text-white font-medium py-2 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl;
   }
 
   .bg-blur {
-    @apply bg-black/40 backdrop-blur-xl;
+    @apply bg-black/30 backdrop-blur-xl border border-white/10;
   }
 
   .card-hover {
-    @apply hover:shadow-lg transition-all duration-300 hover:-translate-y-1;
+    @apply hover:shadow-lg hover:shadow-indigo-500/20 transition-all duration-300 hover:-translate-y-1;
   }
   
   .glass-card {
-    @apply backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl shadow-lg;
+    @apply backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl shadow-lg;
   }
   
   .glass-panel {
-    @apply backdrop-blur-2xl bg-black/30 border border-white/10 rounded-2xl shadow-xl;
+    @apply backdrop-blur-2xl bg-black/40 border border-white/5 rounded-2xl shadow-xl;
   }
   
   .futuristic-gradient {
-    @apply bg-gradient-to-br from-indigo-500 via-purple-500 to-blue-500;
+    @apply bg-gradient-to-br from-indigo-600 via-purple-500 to-blue-500;
   }
   
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-500;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-500;
+  }
+
+  .neon-glow {
+    @apply relative;
+    text-shadow: 0 0 10px rgba(111, 66, 193, 0.7), 0 0 20px rgba(111, 66, 193, 0.5);
+  }
+
+  .grid-pattern {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+
+  .animated-border {
+    @apply relative rounded-xl overflow-hidden;
+  }
+
+  .animated-border::after {
+    content: "";
+    @apply absolute inset-0 rounded-xl;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6, #d946ef, #8b5cf6, #3b82f6);
+    background-size: 400% 400%;
+    z-index: -1;
+    margin: -2px;
+    animation: border-animation 8s ease infinite;
+  }
+
+  @keyframes border-animation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
   }
 }
+

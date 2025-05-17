@@ -34,34 +34,38 @@ const IdeaCard: React.FC<IdeaCardProps> = ({ idea }) => {
     }
   };
 
+  const getStatusColor = () => {
+    return idea.status === 'passed' 
+      ? 'bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-400 border-green-500/30' 
+      : 'bg-gradient-to-r from-red-500/20 to-pink-500/20 text-red-400 border-red-500/30';
+  };
+
   return (
     <Link to={`/idea/${idea.id}`}>
-      <div className="h-full backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl card-hover relative overflow-hidden p-6">
-        <div className="absolute top-0 right-0 p-2">
-          <Badge
-            variant="outline"
-            className={`
-              ${idea.status === 'passed' 
-                ? 'bg-green-500/20 text-green-400 border-green-500/30' 
-                : 'bg-red-500/20 text-red-400 border-red-500/30'}
-            `}
-          >
-            {idea.status === 'passed' ? 'Passed' : 'Failed'}
-          </Badge>
-        </div>
-        <div className="flex flex-col items-center text-center space-y-4">
-          <div className="p-2 rounded-full backdrop-blur-md bg-white/10">
-            {getIcon()}
+      <div className="animated-border h-full">
+        <div className="h-full glass-card card-hover relative overflow-hidden p-6 backdrop-blur-xl bg-white/5 border-none">
+          <div className="absolute top-0 right-0 p-2">
+            <Badge
+              variant="outline"
+              className={getStatusColor()}
+            >
+              {idea.status === 'passed' ? 'Passed' : 'Failed'}
+            </Badge>
           </div>
-          <h3 className="font-bold text-xl text-white">{idea.title}</h3>
-          <p className="text-gray-300 text-sm line-clamp-3">
-            {idea.description}
-          </p>
-        </div>
-        <div className="pt-4 pb-2 flex justify-center">
-          <Badge variant="secondary" className="bg-white/10 text-white hover:bg-white/20 transition-colors">
-            {idea.category}
-          </Badge>
+          <div className="flex flex-col items-center text-center space-y-4">
+            <div className="p-3 rounded-full futuristic-gradient flex items-center justify-center">
+              {getIcon()}
+            </div>
+            <h3 className="font-bold text-xl text-white neon-glow">{idea.title}</h3>
+            <p className="text-gray-300 text-sm line-clamp-3">
+              {idea.description}
+            </p>
+          </div>
+          <div className="pt-4 pb-2 flex justify-center">
+            <Badge variant="secondary" className="backdrop-blur-md bg-white/10 text-white hover:bg-white/20 transition-colors">
+              {idea.category}
+            </Badge>
+          </div>
         </div>
       </div>
     </Link>
