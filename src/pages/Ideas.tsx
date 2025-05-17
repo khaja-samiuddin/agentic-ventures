@@ -127,67 +127,69 @@ const Ideas = () => {
 
   return (
     <PageLayout>
-      <section className="relative py-24 md:py-32">
-        <div className="absolute inset-0 particle-background z-0"></div>
-        <div className="blur-dot h-[600px] w-[600px] -top-20 -right-40"></div>
-        
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="max-w-3xl mx-auto text-center mb-20">
-            <div className="inline-flex items-center justify-center mb-8 glass-morphism px-5 py-2 rounded-full text-xs text-white/70">
-              <Sparkles size={12} className="text-primary mr-2.5" />
-              <span className="tracking-wider">DISCOVER POSSIBILITIES</span>
-            </div>
-            
-            <h1 className="text-4xl md:text-6xl font-medium mb-8 leading-tight animate-fade-in">
-              Explore <span className="text-gradient font-semibold">Innovative</span> Startup Ideas
+      <section className="py-24 pb-12 md:py-32 md:pb-12">
+        <div className="container mx-auto px-6">
+          <div className="max-w-3xl mx-auto text-center mb-16">
+            <h1 className="text-3xl md:text-4xl font-medium mb-3 text-neutral-900">
+              Browse Ideas
             </h1>
-            
-            <p className="text-xl text-muted-foreground mb-12 animate-fade-in text-balance leading-relaxed" style={{ animationDelay: '0.2s' }}>
-              Browse our curated collection of AI-generated startup concepts across various industries and technological domains.
+            <p className="text-lg text-neutral-500">
+              Discover AI-generated startup concepts evaluated by our autonomous agent system
             </p>
           </div>
           
           {/* Search and Filter Bar */}
-          <div className="max-w-4xl mx-auto mb-16 frost-panel rounded-2xl p-8 border border-white/5">
-            <div className="flex flex-col md:flex-row gap-6">
-              <div className="relative flex-grow">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input 
-                  placeholder="Search ideas..." 
-                  className="pl-12 bg-white/5 border-white/10 h-14 text-white"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
+          <div className="max-w-4xl mx-auto mb-16">
+            <div className="bg-white rounded-lg border border-neutral-200 shadow-sm overflow-hidden">
+              {/* Search input */}
+              <div className="p-6 border-b border-neutral-100">
+                <div className="relative">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                    <Search className="h-4 w-4 text-neutral-400" />
+                  </div>
+                  <Input 
+                    placeholder="Search ideas..." 
+                    className="pl-10 bg-background h-12 border-input rounded-md w-full"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
               </div>
-              <div className="flex gap-3 flex-wrap items-center">
-                {categoryFilters.map(category => (
-                  <Badge 
-                    key={category}
-                    className={`px-4 py-3 cursor-pointer transition-all text-sm ${
-                      selectedCategory === category 
-                        ? 'bg-primary/20 text-primary border-primary/30' 
-                        : 'bg-white/5 text-white/70 hover:bg-white/10 border-white/10'
-                    }`}
-                    onClick={() => setSelectedCategory(category)}
-                  >
-                    {category}
-                  </Badge>
-                ))}
+              
+              {/* Category filters */}
+              <div className="px-6 py-4 bg-neutral-50">
+                <div className="flex items-center flex-wrap gap-2">
+                  <span className="text-xs font-medium text-neutral-500 mr-2">FILTER:</span>
+                  {categoryFilters.map(category => (
+                    <Badge 
+                      key={category}
+                      variant={selectedCategory === category ? "default" : "outline"}
+                      className={`py-1.5 cursor-pointer transition-all text-xs ${
+                        selectedCategory === category 
+                          ? 'bg-neutral-900 text-white hover:bg-neutral-800' 
+                          : 'bg-white text-neutral-700 hover:bg-neutral-100 border-neutral-200'
+                      }`}
+                      onClick={() => setSelectedCategory(category)}
+                    >
+                      {category}
+                    </Badge>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
           
           {/* Results count */}
-          <div className="max-w-7xl mx-auto mb-8 px-3">
-            <p className="text-muted-foreground text-sm">
-              Showing {filteredIdeas.length} ideas {selectedCategory !== "All" ? `in ${selectedCategory}` : ''}
+          <div className="max-w-7xl mx-auto mb-4 px-3">
+            <p className="text-neutral-400 text-xs uppercase tracking-wide">
+              {filteredIdeas.length} {filteredIdeas.length === 1 ? 'idea' : 'ideas'} {selectedCategory !== "All" ? `in ${selectedCategory}` : ''}
             </p>
           </div>
           
           {/* Ideas Grid */}
-          <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredIdeas.map((idea, index) => (
-              <div key={idea.id} className="animate-scale-in" style={{ animationDelay: `${0.05 + index * 0.05}s` }}>
+          <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredIdeas.map((idea) => (
+              <div key={idea.id} className="transition-all duration-300">
                 <IdeaCard idea={idea} />
               </div>
             ))}
@@ -195,14 +197,27 @@ const Ideas = () => {
           
           {/* No results message */}
           {filteredIdeas.length === 0 && (
-            <div className="max-w-lg mx-auto text-center mt-12 py-16">
-              <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-8">
-                <Search className="h-8 w-8 text-muted-foreground" />
+            <div className="max-w-lg mx-auto mt-16 overflow-hidden bg-white rounded-lg border border-neutral-200 shadow-sm">
+              <div className="p-10 text-center">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-neutral-100 mb-6">
+                  <Search className="h-5 w-5 text-neutral-400" />
+                </div>
+                <h3 className="text-base font-medium text-neutral-900 mb-2">No results found</h3>
+                <p className="text-neutral-500 text-sm mb-6">
+                  Try adjusting your filters or using different search terms
+                </p>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  className="border-neutral-200 hover:bg-neutral-100 hover:text-neutral-900"
+                  onClick={() => {
+                    setSearchQuery("");
+                    setSelectedCategory("All");
+                  }}
+                >
+                  Clear all filters
+                </Button>
               </div>
-              <h3 className="text-2xl font-medium text-white mb-4">No ideas found</h3>
-              <p className="text-muted-foreground text-lg">
-                We couldn't find any ideas matching your search criteria. Try adjusting your filters or search query.
-              </p>
             </div>
           )}
         </div>
