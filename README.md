@@ -40,6 +40,8 @@ npm i
 npm run dev
 ```
 
+Running `npm run dev` will start Vite on [http://localhost:8080](http://localhost:8080) as configured in `vite.config.ts`. Visit this URL to access the app.
+
 ## Deployment
 
 The application can be deployed to any static site hosting service such as Vercel, Netlify, or GitHub Pages.
