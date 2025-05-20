@@ -171,6 +171,9 @@ function toast({ ...props }: Toast) {
 function useToast() {
   const [state, setState] = React.useState<State>(memoryState)
 
+  // Subscribe once to state updates on mount.
+  // Using [state] here would re-subscribe every time the state changes,
+  // leading to duplicate listeners and memory leaks.
   React.useEffect(() => {
     listeners.push(setState)
     return () => {
