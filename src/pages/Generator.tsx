@@ -11,7 +11,7 @@ const categoryFilters = [
   "Retail", "Agriculture", "Marketing", "Logistics"
 ];
 
-const Ideas = () => {
+const Generator = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   
@@ -194,4 +194,4 @@ const Ideas = () => {
   );
 };
 
-export default Ideas;
+export default Generator;
